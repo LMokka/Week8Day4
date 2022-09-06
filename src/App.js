@@ -9,6 +9,8 @@ import { useState } from 'react';
 import Login from './components/Login';
 import userEvent from '@testing-library/user-event';
 import CreatePost from './components/CreatePost';
+import ViewBlog from './components/ViewBlog';
+import ViewPosts from './components/ViewPosts';
 
 function App(props) {
 	const now = new Date();
@@ -34,7 +36,7 @@ function App(props) {
 
     return (
       <>
-          <Navbar name='Brian' city='Chicago' logout={logout} loggedIn={loggedIn}/>
+          <Navbar name='Thank you' city='Rebecca' logout={logout} loggedIn={loggedIn}/>
           <div className='container'>
 				{message ? <AlertMessage message={message} category={category} flashMessage={flashMessage} /> : null}
 				{ loggedIn ? <h1>You are logged in </h1> : <h1>You are logged out</h1>}
@@ -44,6 +46,8 @@ function App(props) {
 					<Route path='/register' element={<Register flashMessage={flashMessage}/>} />
 					<Route path='/login' element={<Login flashMessage={flashMessage} login={login}/>} />
 					<Route path='/create-post' element={<CreatePost flashMessage={flashMessage} login={login} loggedIn={loggedIn}/>} />
+					<Route path='/ViewBlog' element={<ViewBlog flashMessage={flashMessage} login={login} loggedIn={loggedIn} />} />
+					<Route path='/ViewPosts' element={<ViewPosts/>} />
 				</Routes>
           </div>
       </>

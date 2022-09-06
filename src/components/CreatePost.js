@@ -44,7 +44,8 @@ export default function CreatePost(props) {
                     console.error(data.error)
                 } else {
                     props.flashMessage('You have created a post!', 'success')
-                    navigate('/')
+                    navigate('/ViewBlog',{state:{title: title, body: body}})
+                    
                 }
             })
 
@@ -57,7 +58,7 @@ export default function CreatePost(props) {
                 <div className="form-group">
                     <label htmlFor="title">Title</label>
                     <input type="text" className="form-control" placeholder='Enter Title' name='title' />
-                    <label htmlFor="body">Body</label>
+                    <label htmlFor="content">Body</label>
                     <input type="text" className="form-control" placeholder='Body goes here' name="body" />
                     <input type="submit" className="btn btn-primary w-100 mt-3" value="Create Post"/>
                 </div>
