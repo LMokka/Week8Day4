@@ -1,56 +1,67 @@
-import React, { useEffect } from 'react';
-import { useNavigate} from 'react-router-dom';
+import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 export default function CreatePost(props) {
-    let navigate = useNavigate();
 
-    useEffect(() => {
-        if (!props.loggedIn){
-            props.flashMessage('You must be logged in to create a post','danger')
-            navigate('/login')
-            }
-        }, [props.loggedIn])
+    let navigate = useNavigate(); 
 
-    const handleSubmit = (e) => {
+    if (props.loggedIn === false){
+        props.flashMessage('You need to be logged in to create a post', 'danger')
+    }
+
+    const handleSubmit = e => {
         e.preventDefault();
-
-        let myHeaders = new Headers();
-        let myToken = localStorage.getItem('token');
-        myHeaders.append('Authorization', `Bearer ${myToken}`)
-        myHeaders.append('Content-Type', 'application/json')
+        console.log(e);
 
         let title = e.target.title.value;
         let body = e.target.body.value;
 
-        let data = JSON.stringify({title,body})
+        console.log(title)
+        console.log(body)
 
-        fetch('http://localhost:5000/api/posts/create',{
-            method:'POST',
+        let token = localStorage.getItem('token')
+        let expiration = localStorage.getItem('expiration')
+        console.log(token)
+        console.log(expiration)
+
+        let myHeaders = new Headers();
+        myHeaders.append('Authorization', "Bearer " + token)
+        myHeaders.append('Content-type', 'application/json');
+
+        let formData = JSON.stringify({
+            title: e.target.title.value,
+            body: e.target.body.value
+        })
+
+        fetch('http://localhost:5000/api/posts', {
+            method: 'POST',
             headers: myHeaders,
-            body: data
-        }).then(res => res.json())
+            body: formData
+        })
+            .then(res => res.json())
             .then(data => {
                 if (data.error){
                     console.error(data.error)
                 } else {
-                    props.flashMessage(`The post ${data.title} has been created`, 'success')
-                    navigate('/blog')
-
+                    props.flashMessage('You have created a post!', 'success')
+                    navigate('/')
                 }
             })
-            
 
     }
+
     return (
-        <form onSubmit = {handleSubmit}>
-            <h3 className='text-center'>Create New Post</h3>
-            <div className="form-group">
-                    <label htmlFor='title'>Title</label>
-                    <input type='text' name='title' className='form-control' placeholder='Enter Title Here' />
-                    <label htmlFor='body'>Body</label>
-                    <input type='text' name='body' className='form-control' placeholder='Enter Body Here' />
-                    <input type='submit' className='btn btn-primary w-100 mt-3' value='Create Post' />
+        <>
+            <h4 className="text-center">Create Post</h4>
+            <form action="" onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label htmlFor="title">Title</label>
+                    <input type="text" className="form-control" placeholder='Enter Title' name='title' />
+                    <label htmlFor="body">Body</label>
+                    <input type="text" className="form-control" placeholder='Body goes here' name="body" />
+                    <input type="submit" className="btn btn-primary w-100 mt-3" value="Create Post"/>
                 </div>
-        </form>
-    )
+            </form>
+        </>
+  )
 }
